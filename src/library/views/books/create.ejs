@@ -1,0 +1,12 @@
+<%- include('../parts/layout-start', { title: title }) %>
+<%- include('../parts/menu') %>
+
+<h1><%= title %></h1>
+
+<div class="row">
+    <div class="col-sm-6">
+        <%- include('../components/form', { action: '/api/books' }) %>
+    </div>
+</div>
+
+<%- include('../parts/layout-end') %>
