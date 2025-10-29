@@ -10,10 +10,11 @@
     "cmd": "./src/task_1/index.js",
     "guess": "./src/task_2/index.js",
     "heads-and-tails": "./src/task_3/index.js",
-    "read-logs": "./src/task_4/index.js"
+    "read-logs": "./src/task_4/index.js",
+    "weather": "./src/task_5/index.js"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "weather": "node -r dotenv/config ./src/task_5/index.js -c Moscow"
   },
   "dependencies": {
     "date-fns": "^4.1.0",
@@ -21,5 +22,8 @@
     "multer": "^2.0.2",
     "uuid": "^13.0.0",
     "yargs": "^18.0.0"
+  },
+  "devDependencies": {
+    "dotenv": "^17.2.3"
   }
 }
