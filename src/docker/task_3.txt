@@ -1,0 +1,9 @@
+docker pull node:24.10.0
+docker run --name first_node -d -t -v ./data:/var/first/data node:24.10.0 
+docker run --name second_node -d -t -v ./data:/var/second/data node:24.10.0 
+docker exec -it first_node /bin/bash
+docker stop first_node
+docker stop second_node
+docker rm first_node
+docker rm second_node
+docker rmi node:24.10.0

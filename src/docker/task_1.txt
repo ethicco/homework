@@ -1,0 +1,55 @@
+docker pull busybox -> 
+
+Using default tag: latest
+latest: Pulling from library/busybox
+499bcf3c8ead: Pull complete 
+Digest: sha256:2f590fc602ce325cbff2ccfc39499014d039546dc400ef8bbf5c6ffb860632e7
+Status: Downloaded newer image fo
+
+----------------------
+
+docker run --name pinger busybox ping -c 7 netology.ru
+
+64 bytes from 51.250.51.8: seq=1 ttl=63 time=48.553 ms
+64 bytes from 51.250.51.8: seq=2 ttl=63 time=53.265 ms
+64 bytes from 51.250.51.8: seq=3 ttl=63 time=48.417 ms
+64 bytes from 51.250.51.8: seq=4 ttl=63 time=57.143 ms
+64 bytes from 51.250.51.8: seq=5 ttl=63 time=55.095 ms
+64 bytes from 51.250.51.8: seq=6 ttl=63 time=50.698 ms
+
+--- netology.ru ping statistics ---
+7 packets transmitted, 7 packets received, 0% packet loss
+round-trip min/avg/max = 48.417/51.825/57.143 ms
+dmitrypodkopaev@MacBook-Pro-Dmitry homework % 
+
+----------------------
+
+docker ps 
+docker ps -a
+
+bde99c022d78 busybox "ping -c 7 netology.…"   29 minutes ago   Exited (0) 29 minutes ago  pinger
+
+----------------------
+
+docker logs pinger
+
+PING netology.ru (51.250.51.8): 56 data bytes
+64 bytes from 51.250.51.8: seq=0 ttl=63 time=49.608 ms
+64 bytes from 51.250.51.8: seq=1 ttl=63 time=48.553 ms
+64 bytes from 51.250.51.8: seq=2 ttl=63 time=53.265 ms
+64 bytes from 51.250.51.8: seq=3 ttl=63 time=48.417 ms
+64 bytes from 51.250.51.8: seq=4 ttl=63 time=57.143 ms
+64 bytes from 51.250.51.8: seq=5 ttl=63 time=55.095 ms
+64 bytes from 51.250.51.8: seq=6 ttl=63 time=50.698 ms
+
+--- netology.ru ping statistics ---
+7 packets transmitted, 7 packets received, 0% packet loss
+round-trip min/avg/max = 48.417/51.825/57.143 ms
+
+----------------------
+
+docker start pinger
+docker ps
+docker ps -a
+docker logs pinger - 2 вызова пинг и 7 запросов ы каждом вызове
+docker rm -f pinger

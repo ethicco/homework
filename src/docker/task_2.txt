@@ -1,0 +1,32 @@
+docker pull node:24.10.0-alpine3.21
+
+24.10.0: Pulling from library/node
+394d8e61f78f: Pull complete 
+add7397bc0ae: Pull complete 
+fd15270faa4e: Pull complete 
+6803b5e31b40: Pull complete 
+7117e91059e0: Pull complete 
+204f6252862d: Pull complete 
+34cc5ccb617b: Pull complete 
+480725d25d78: Pull complete 
+Digest: sha256:06e54ecf113a30f0ff9a1d309866a5924d3bda4389eab11a0e1e92f3251d915d
+Status: Downloaded newer image for node:24.10.0
+docker.io/library/node:24.10.0
+
+
+--------------------------------
+
+docker run -it --name mynode -e NAME=Dmitry -e SURNAME=Podkopaev node /bin/bash
+node
+
+console.log('Привет', process.env.NAME, process.env.SURNAME, '!')
+
+Привет, Dmitry Podkopaev!
+
+--------------------------------
+
+ docker stop mynode 
+
+--------------------------------
+
+docker rmi node:24.10.0
