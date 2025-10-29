@@ -10,7 +10,8 @@
     "cmd": "./src/task_1/index.js",
     "guess": "./src/task_2/index.js",
     "heads-and-tails": "./src/task_3/index.js",
-    "read-logs": "./src/task_4/index.js"
+    "read-logs": "./src/task_4/index.js",
+    "weather": "./src/task_5/index.js"
   },
   "scripts": {
     "start": "node ./src/library/index.js",
@@ -25,6 +26,7 @@
     "yargs": "^18.0.0"
   },
   "devDependencies": {
-    "nodemon": "^3.1.10"
+    "nodemon": "^3.1.10",
+    "dotenv": "^17.2.3"
   }
 }
