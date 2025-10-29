@@ -14,16 +14,19 @@
     "weather": "./src/task_5/index.js"
   },
   "scripts": {
-    "weather": "node -r dotenv/config ./src/task_5/index.js -c Moscow"
+    "start": "node ./src/library/index.js",
+    "dev": "nodemon ./src/library/index.js"
   },
   "dependencies": {
     "date-fns": "^4.1.0",
+    "ejs": "^3.1.10",
     "express": "^5.1.0",
     "multer": "^2.0.2",
     "uuid": "^13.0.0",
     "yargs": "^18.0.0"
   },
   "devDependencies": {
+    "nodemon": "^3.1.10",
     "dotenv": "^17.2.3"
   }
 }
