@@ -1,0 +1,15 @@
+version: '3.9'
+services:
+  storage:
+    image: redis
+    volumes:
+      - ./data:/data
+  library:
+    image: ethicco/library:v2.0.0
+    environment:
+      - PORT=3000
+      - REDIS_URL=redis://storage
+    ports:
+      - 80:3000
+    depends_on:
+      - storage
