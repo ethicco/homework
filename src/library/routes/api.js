@@ -2,6 +2,7 @@ const express = require('express');
 const uuid = require('uuid');
 const multer = require('../middleware/file');
 const { store } = require('./index');
+const redisClient = require('../libs/redis-client');
 
 const routerApi = express.Router();
 
@@ -43,14 +44,19 @@ routerApi.get('/books', (req, res) => {
   res.json(books);
 });
 
-routerApi.get('/books/:id', (req, res) => {
+routerApi.get('/books/:id', async (req, res) => {
   const { books } = store;
   const { id } = req.params;
 
   const book = books.find(book => book.id === id);
 
   if(book){
-    res.json(book);
+    try {
+      const cnt = await redisClient.incr(book.title)
+      res.json({book, cnt}); 
+    } catch (error) {
+      res.json({errCode: 500, errMessage: `Redis error ${error}!`})
+    }
   } else {
     res.status(404);
     res.json('404 | страница не найдена');
@@ -147,6 +153,28 @@ routerApi.get('/books/:id/download', (req, res) => {
   } else {
     res.status(404);
     res.json('404 | страница не найдена');
+  }
+})
+
+routerApi.post('/counter/:bookId/incr', async (req, res) => {
+  const { bookId } = req.params;
+
+  try {
+    const cnt = await redisClient.incr(bookId);
+    res.json({bookId, cnt}); 
+  } catch (error) {
+    res.json({errCode: 500, errMessage: `Redis error ${error}!`})
+  }
+})
+
+routerApi.get('/counter/:bookId', async (req, res) => {
+  const { bookId } = req.params;
+  
+  try {
+    const cnt = await redisClient.get(bookId);
+    res.json({bookId, cnt}); 
+  } catch (error) {
+    res.json({errCode: 500, errMessage: `Redis error ${error}!`})
   }
 })
 
