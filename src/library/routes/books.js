@@ -1,7 +1,5 @@
 const express = require('express');
-const uuid = require('uuid');
-const multer = require('../middleware/file');
-const { store } = require('./index');
+const BookModel = require('../models/book');
 
 const routerBooks = express.Router();
 
@@ -12,33 +10,31 @@ routerBooks.get('/create', (req, res) => {
     });
 });
 
-routerBooks.get('/:id', (req, res) => {
-    const { books } = store;
+routerBooks.get('/:id', async (req, res) => {
     const { id } = req.params;
-    const idx = books.findIndex(el => el.id === id);
+    const book = await BookModel.findById(id)
 
-    if (idx === -1) {
-        res.redirect('/404');
+    if (!book) {
+        return res.redirect('/404');
     } 
         
     res.render("books/view", {
         title: "Book | view",
-        book: books[idx],
+        book
     });
 });
 
-routerBooks.get('/update/:id', (req, res) => {
-    const { books } = store;
+routerBooks.get('/update/:id', async (req, res) => {
     const { id } = req.params;
-    const idx = books.findIndex(el => el.id === id);
+    const book = await BookModel.findById(id);
 
-    if (idx === -1) {
+    if (!book) {
         res.redirect('/404');
     } 
 
     res.render("books/update", {
         title: "Book | update",
-        book: books[idx],
+        book,
     });
 });
 

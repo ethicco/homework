@@ -1,32 +1,9 @@
 const express = require('express');
-const uuid = require('uuid');
 const multer = require('../middleware/file');
-const { store } = require('./index');
 const redisClient = require('../libs/redis-client');
+const BookModel = require('../models/book');
 
 const routerApi = express.Router();
-
-class Book {
-  constructor(
-    title = '',
-    description = '',
-    authors = '',
-    favorite = false,
-    fileCover = '',
-    fileName = '',
-    fileBook = '',
-    id = uuid.v4()
-  ){
-    this.title = title;
-    this.description = description;
-    this.authors = authors;
-    this.favorite = favorite;
-    this.fileCover = fileCover,
-    this.fileName = fileName;
-    this.fileBook = fileBook;
-    this.id = id;
-  }
-}
 
 routerApi.post('/user/login', (req, res) => {
 
@@ -38,17 +15,16 @@ routerApi.post('/user/login', (req, res) => {
   res.json({id: 1, mail: req.body.email}).status(201)
 });
 
-routerApi.get('/books', (req, res) => {
-  const { books } = store;
-
+routerApi.get('/books', async (req, res) => {
+  const books = await BookModel.find()
+console.log(books)
   res.json(books);
 });
 
 routerApi.get('/books/:id', async (req, res) => {
-  const { books } = store;
   const { id } = req.params;
 
-  const book = books.find(book => book.id === id);
+  const book = await BookModel.findById(id);
 
   if(book){
     try {
@@ -63,8 +39,7 @@ routerApi.get('/books/:id', async (req, res) => {
   }
 });
 
-routerApi.post('/books', multer.single('fileBook'), (req, res) => {
-  const { books } = store;
+routerApi.post('/books', multer.single('fileBook'), async (req, res) => {
   const {  
     title,
     description,
@@ -74,23 +49,23 @@ routerApi.post('/books', multer.single('fileBook'), (req, res) => {
     fileName
   } = req.body
 
-   const newBook = new Book(
+  const newBook = new BookModel({
     title, 
     description,
     authors,
     favorite,
     fileCover,
     fileName,
-    fileBook = req?.file?.path,
-  );
-  books.push(newBook);
+    fileBook: req?.file?.path,
+  })
+   
+  await newBook.save()
 
   res.status(301);
   res.redirect('/');
 });
 
-routerApi.post('/books/:id', (req, res) => {
-  const { books } = store;
+routerApi.post('/books/:id', async (req, res) => {
   const {  
     title,
     description,
@@ -101,52 +76,38 @@ routerApi.post('/books/:id', (req, res) => {
   } = req.body;
   const { id } = req.params;
 
-  const book = books.find(book => book.id === id);
-
-  if(book){
-    const idx = books.findIndex(book => book.id === id)
-    books[idx] = {
-      ...books[idx],
-      title,
-      description,
-      authors,
-      favorite,
-      fileCover,
-      fileName,
-    }
-
-    res.redirect('/')
-  } else {
-    res.status(404)
-    res.redirect('/404')
-  }
+  await BookModel.updateOne({
+    _id: id
+  }, 
+  { $set: {
+    title,
+    description,
+    authors,
+    favorite,
+    fileCover,
+    fileName
+  }})
+    
+  res.redirect('/')
 });
 
-routerApi.delete('/books/:id', (req, res) => {
-  const { books } = store;
+routerApi.delete('/books/:id', async (req, res) => {
   const { id } = req.params;
 
-  const idx = books.findIndex(book => book.id === id);
-    
-  if(idx !== -1){
-    books.splice(idx, 1);
-    res.redirect('/');
-  } else {
-    res.status(404);
-    res.redirect('/404')
-  }
+  await BookModel.deleteOne({ id })    
+  
+  res.redirect('/');
 });
 
 routerApi.get('/books/:id/download', (req, res) => {
-  const { books } = store;
   const { id } = req.params;
 
-  const book = books.find(book => book.id === id);
+  const book = BookModel.findOne({ id });
 
   if(book){
     res.download(book.fileBook, (err) => {
       if(err){
-        console.error(err)
+        console.error(err);
         res.status(500).json({ message: 'Ошибка при скачивании файла' })
       }
     })
