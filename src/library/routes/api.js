@@ -1,18 +1,60 @@
 const express = require('express');
+const passport = require('../libs/passport')
+
+
 const multer = require('../middleware/file');
 const redisClient = require('../libs/redis-client');
 const BookModel = require('../models/book');
+const UserModel = require('../models/user')
 
 const routerApi = express.Router();
 
-routerApi.post('/user/login', (req, res) => {
 
-  if(!req.body?.email){
-    res.status(404)
-     res.json('404 | Пользователь не найден')
+routerApi.get('/user/login', (req, res) => {
+  res.render('auth/login', {
+    title: 'Авторизация',
+     isRegistration: false
+  })
+});
+
+routerApi.get('/user/signup', (req, res) => {
+  res.render('auth/login', {
+    title: 'Регистрация',
+    isRegistration: true
+  })
+})
+
+routerApi.get(
+  '/user/me', 
+  (req, res, next) => {
+    if(!req.isAuthenticated()) {
+      return res.redirect('/api/user/login');
+    }
+
+    next()
+  }, 
+  (req, res) => {
+    res.render('auth/profile', {
+      user: req.user
+    })
   }
+);
 
-  res.json({id: 1, mail: req.body.email}).status(201)
+routerApi.post(
+  '/user/login', 
+  passport.authenticate('local', { failureRedirect: '/' }), 
+  (req, res) => {
+    res.redirect('/')
+  }
+);
+
+routerApi.post('/user/signup', async (req, res) => {
+  const { username, password } = req.body;
+  const user = new UserModel({ username, password });
+
+  await user.save();
+
+  res.redirect('/api/user/login');
 });
 
 routerApi.get('/books', async (req, res) => {
