@@ -1,19 +1,17 @@
 const express = require('express')
+const BookModel = require('../models/book')
 
 const router = express.Router()
 
-const store = {
-  books: []
-};
+router.get('/', async (req, res) => {
+  const books = await BookModel.find();
 
-router.get('/', (req, res) => {
   res.render('index', {
     title: 'Главная (Список книг)',
-    books: store.books
+    books
   })
 })
 
 module.exports = {
-  router,
-  store
+  router
 }
