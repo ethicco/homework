@@ -1,0 +1,20 @@
+version: '3.9'
+services:
+  storage:
+    image: redis
+    volumes:
+      - ./data:/data
+  library:
+    image: node:24.11.0
+    working_dir: /app
+    volumes:
+      - ./:/app
+    environment:
+      - PORT=3000
+      - REDIS_URL=redis://storage
+    ports:
+      - 80:3000
+    command: ["npm", "run", "dev"]
+    depends_on:
+      - storage
+    
