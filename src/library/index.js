@@ -8,13 +8,20 @@ const { router: routerIndex } = require('./routes/index');
 const routerBooks = require('./routes/books');
 const routerApi = require('./routes/api')
 const errorMiddleware = require('./middleware/error');
-const mongoose = require('mongoose')
+const mongoose = require('mongoose');
+const session = require('express-session');
+const passport = require('./libs/passport');
 
 const app = express();
 
 app.use(express.urlencoded());
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', "ejs");
+
+app.use(session({secret: 'SECRET'}));
+
+app.use(passport.initialize());
+app.use(passport.session());
 
 app.use('/', routerIndex);
 app.use('/api', routerApi)
