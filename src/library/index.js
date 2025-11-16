@@ -56,7 +56,7 @@ io.on('connection', (socket) => {
 async function start(PORT, UrlDB) {
   try {
     await mongoose.connect(UrlDB);
-    app.listen(PORT, () => console.log(`Server is running on port ${PORT}`));
+    server.listen(PORT, () => console.log(`Server is running on port ${PORT}`));
   } catch (e) {
     console.log(e);
   }
