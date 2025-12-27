@@ -56,7 +56,10 @@
 
 <script>
     const roomName = location.pathname.split('/').pop();
-    const socket = io.connect('/', {query: `roomName=${roomName}`});
+    const socket = io({query: `roomName=${roomName}`});
+
+    console.log('Current room:', roomName);
+    console.log('Socket URL:', location.origin);
     
     const boxList       = document.querySelector('#list');
     const inputUsername = document.querySelector('#username');
@@ -68,7 +71,7 @@
                 <div class="list-group-item list-group-item-action">
                     <div class="d-flex w-100 justify-content-between">
                         <small>${msg.username}</small>
-                        <small class="text-muted">${msg.type}</small>
+                        <small class="text-muted">${msg.timestamp}</small>
                     </div>
                     <p class="mb-1">${msg.text}</p>
                 </div>
