@@ -5,7 +5,7 @@ const router = express.Router()
 
 router.get(
   '/', 
-  async (req, res) => {   
+  async (req, res) => {  
     if(req.user) {
       const books = await BookModel.find();
 

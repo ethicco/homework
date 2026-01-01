@@ -59,7 +59,7 @@ routerApi.post('/user/signup', async (req, res) => {
 
 routerApi.get('/books', async (req, res) => {
   const books = await BookModel.find()
-console.log(books)
+
   res.json(books);
 });
 
