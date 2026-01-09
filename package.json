@@ -13,7 +13,8 @@
     "weather": "./src/task_5/index.js"
   },
   "scripts": {
-    "build": "tsc --build",
+    "copy-views": "copyfiles -u 3 src/library/views/**/* dist/library/views",
+    "build": "tsc --build && npm run copy-views",
     "start": "node ./dist/library/index.js",
     "dev": "nodemon"
   },
@@ -38,6 +39,7 @@
     "@types/multer": "^2.0.0",
     "@types/passport": "^1.0.17",
     "@types/passport-local": "^1.0.38",
+    "copyfiles": "^2.4.1",
     "dotenv": "^17.2.3",
     "nodemon": "^3.1.10",
     "typescript": "^5.9.3"
