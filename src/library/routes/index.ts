@@ -1,13 +1,16 @@
-const express = require('express');
-const BookModel = require('../models/book');
+import { Router } from 'express';
+import container from '../container';
+import { BooksRepository } from '../repositories';
 
-const router = express.Router()
+const router = Router();
+
+const repo = container.get(BooksRepository);
 
 router.get(
   '/', 
   async (req, res) => {  
     if(req.user) {
-      const books = await BookModel.find();
+      const books = await repo.getBooks();
 
       res.render('index', {
         title: 'Главная (Список книг)',
@@ -21,6 +24,4 @@ router.get(
   }
 )
 
-module.exports = {
-  router
-}
+export default router
