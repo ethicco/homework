@@ -1,4 +1,5 @@
-const { Schema, model } = require('mongoose');
+import { Schema, model } from 'mongoose';
+import { IBookDocument } from '../interfaces/book.interface';
 
 const bookSchema = new Schema({
   title: {
@@ -26,4 +27,4 @@ const bookSchema = new Schema({
   }
 });
 
-module.exports = model('Book', bookSchema);
+export default model<IBookDocument>('Book', bookSchema);

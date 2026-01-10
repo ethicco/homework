@@ -1,6 +1,6 @@
-// redisClient.js
-const redis = require('redis');
-const client = redis.createClient({ url: process.env.REDIS_URL });
+import { createClient } from 'redis';
+
+const client = createClient({ url: process.env.REDIS_URL });
 
 client.on('error', (err) => console.error('Ошибка Redis:', err));
 
@@ -9,4 +9,4 @@ client.on('error', (err) => console.error('Ошибка Redis:', err));
   console.log('✅ Redis подключен');
 })();
 
-module.exports = client;
+export default client;

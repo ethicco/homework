@@ -1,19 +1,45 @@
 import { Router } from 'express';
+
 import container from '../container';
-import BooksRepository from '../repositories/books-repository';
+import BooksRepository from '../repositories/books-repository';;
 
 const routerBooks = Router();
+const repo = container.get(BooksRepository);
 
-routerBooks.get(':id', async (req, res) => {
-  const repo = container.get(BooksRepository);
-  const book = await repo.getBook(req.params.id);
+routerBooks.get('/create', (req, res) => {
+    res.render("books/create", {
+        title: "Book | create",
+        book: {},
+    });
+});
 
-  if(!book) {
-    return res.status(404).json({
-      status: 404,
-      message: 'Book not found'
-    })
-  }
+routerBooks.get('/:id', async (req, res) => {
+    const { id } = req.params;
 
-  return res.json(book);
-})
+    const book = await repo.getBook(req.params.id);
+
+    if (!book) {
+        return res.redirect('/404');
+    } 
+        
+    res.render("books/view", {
+        title: "Book | view",
+        book
+    });
+});
+
+routerBooks.get('/update/:id', async (req, res) => {
+    const { id } = req.params;
+    const book = await repo.getBook(id);
+
+    if (!book) {
+        res.redirect('/404');
+    } 
+
+    res.render("books/update", {
+        title: "Book | update",
+        book,
+    });
+});
+
+export default routerBooks;

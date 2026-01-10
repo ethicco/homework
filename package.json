@@ -4,8 +4,7 @@
   "description": "",
   "license": "ISC",
   "author": "",
-  "main": "./src/library/index.js",
-  "type": "module",
+  "main": "./dist/library/index.js",
   "bin": {
     "cmd": "./src/task_1/index.js",
     "guess": "./src/task_2/index.js",
@@ -14,7 +13,9 @@
     "weather": "./src/task_5/index.js"
   },
   "scripts": {
-    "start": "node ./src/library/index.js",
+    "copy-views": "copyfiles -u 3 src/library/views/**/* dist/library/views",
+    "build": "tsc --build && npm run copy-views",
+    "start": "node ./dist/library/index.js",
     "dev": "nodemon"
   },
   "dependencies": {
@@ -34,6 +35,11 @@
   },
   "devDependencies": {
     "@types/express": "^5.0.6",
+    "@types/express-session": "^1.18.2",
+    "@types/multer": "^2.0.0",
+    "@types/passport": "^1.0.17",
+    "@types/passport-local": "^1.0.38",
+    "copyfiles": "^2.4.1",
     "dotenv": "^17.2.3",
     "nodemon": "^3.1.10",
     "typescript": "^5.9.3"

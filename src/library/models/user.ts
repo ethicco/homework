@@ -1,4 +1,5 @@
-const { Schema, model } = require('mongoose');
+import { Schema, model } from 'mongoose';
+import { IUserDocument } from '../interfaces/user.interface';
 
 const userSchema = new Schema({
   username: {
@@ -13,4 +14,4 @@ const userSchema = new Schema({
   }
 });
 
-module.exports = model('User', userSchema);
+export default model<IUserDocument>('User', userSchema);

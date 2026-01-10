@@ -1,22 +1,23 @@
-const dotenv = require('dotenv')
-dotenv.config()
+import { config } from'dotenv';
+config()
 
-const uuid = require('uuid');
-const express = require('express');
-const http = require('http');
-const path = require('path');
-const { router: routerIndex } = require('./routes/index');
-const routerBooks = require('./routes/books');
-const routerApi = require('./routes/api')
-const errorMiddleware = require('./middleware/error');
-const mongoose = require('mongoose');
-const session = require('express-session');
-const socketIO = require('socket.io');
-const passport = require('./libs/passport');
+import express from 'express';
+import { createServer } from 'http';
+import path from 'path';
+import mongoose from 'mongoose';
+import session from 'express-session';
+import { Server } from 'socket.io';
+
+import { errorMiddleware } from './middleware';
+import { passport } from './libs';
+
+import routerIndex from './routes/index';
+import routerBooks from './routes/books';
+import routerApi from './routes/api';
 
 const app = express();
-const server = http.Server(app);
-const io = socketIO(server, {
+const server = createServer(app);
+const io = new Server(server, {
   cors: {
     origin: 'http://localhost:3000',
     methods: ["GET", "POST"]
@@ -76,16 +77,16 @@ io.on('connection', (socket) => {
   });
 })
 
-async function start(PORT, UrlDB) {
+async function start(port: number, urlDb: string) {
   try {
-    await mongoose.connect(UrlDB);
-    server.listen(PORT, () => console.log(`Server is running on port ${PORT}`));
+    await mongoose.connect(urlDb);
+    server.listen(port, () => console.log(`Server is running on port ${port}`));
   } catch (e) {
     console.log(e);
   }
 }
 
-const URL_DB = process.env.URL_DB
+const URL_DB = process.env.DATABASE_URL
 const PORT = process.env.PORT || 3000;
 
 start(PORT, URL_DB);
